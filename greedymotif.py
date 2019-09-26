@@ -19,8 +19,10 @@ mot = text[1:]
 for x in mot:
     x.strip('\n')
 
+
 def scorekmer(kmer,profile,charm):
-    prob = 0
+    prob = 1
+    print(profile)
     for i in range(len(kmer)):
         prob = prob*profile[charm[kmer[i]],i]
         print(prob)
@@ -35,6 +37,7 @@ def mlk(dna,k,prof,cmap):
         if score > smax:
             smax = score
             bestkmer = dna[x:x+k]
+    print(bestkmer)
     return bestkmer
 
 def buildprofile(motifs,k,t,cmap):
@@ -44,7 +47,7 @@ def buildprofile(motifs,k,t,cmap):
             pmat[cmap[x[y]],y]+=1
     for i,x in enumerate(pmat):
         for j,y in enumerate(x):
-            pmat[i,j] = pmat[i,j]/t
+            pmat[i,j] = (pmat[i,j]+1)/(t+t)
     return pmat
 
 def pscore(profile):
@@ -60,9 +63,12 @@ chmap = {'A':0,'C':1,'G':2,'T':3}
 motifs = []
 for x in range(len(mot[0]) - k):
     m = [mot[0][x:x+k]]
+    print(m)
     seed = buildprofile(m,k,t,chmap)
     for y in range(1,t):
+        print(mlk(mot[y],k,seed,chmap))
         m.append([mlk(mot[y],k,seed,chmap)])
+        print(m)
         seed = buildprofile(m,k,t,chmap)
     motifs.append((seed,m))
 
